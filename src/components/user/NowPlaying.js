@@ -27,10 +27,10 @@ class NowPlaying extends Component{
 
   componentDidMount(){
     setInterval(
-      this.currentSong
-      , 1000
-      , this
-      , this.props.api
+      this.currentSong,
+      1000,
+      this,
+      this.props.api
     );
   }
 
@@ -44,7 +44,11 @@ class NowPlaying extends Component{
               <i>
                 {this.state.nowPlaying.name} -
                 {this.state.nowPlaying.artist.map((artist, key) =>
-                  <span key={key}>{artist.name} & </span>
+                  <span key={key}>{artist.name}
+
+                  {/* ES6 if statement without the "else" part */}
+                  {key < this.state.nowPlaying.artist.length - 1 &&
+                    <span>, </span> }</span>
                 )}
               </i>
             </div>

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import FoundTracks from "../FoundTracks";
 
 class MyTopSongs extends Component{
   constructor(){
@@ -12,7 +13,6 @@ class MyTopSongs extends Component{
     this.props.api.getMyTopTracks({limit: 10})
       .then(
         response => {
-          console.log(response);
           this.setState({songs: response.items})
         },
         error => console.log(error)
@@ -21,17 +21,12 @@ class MyTopSongs extends Component{
 
   render(){
     return(
-      <div className="content">
-        <ol className="song-list">
-          {this.state.songs.map((song, key) =>
-            <li className="song-list-item" key={key}>
-              <div>
-                <span className="title" key={key}>{song.name}</span><span className="subtitle">{song.artists[0].name}</span>
-              </div>
-            </li>
-          )}
-        </ol>
-      </div>
+      <>
+        <FoundTracks
+          results={this.state.songs}
+          closeWindow={this.props.closeWindow}
+        />
+      </>
     )
   }
 }

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import FoundTracks from "../FoundTracks";
 
 class Recommendations extends Component{
   constructor(){
@@ -30,15 +31,12 @@ class Recommendations extends Component{
 
   render(){
     return(
-      <div className="content">
-        {this.state.recommendations.length > 0 ?
-          this.state.recommendations.map((artist, key) =>
-            <span key={key} style={{display:'block'}}><b>{artist.artists[0].name}</b>{artist.name}</span>
-          )
-          :
-            <i>Loading</i>
-        }
-      </div>
+      <>
+        <FoundTracks
+          results={this.state.recommendations}
+          closeWindow={this.props.closeWindow}
+        />
+      </>
     )
   }
 }

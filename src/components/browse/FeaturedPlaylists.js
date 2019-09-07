@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import FoundTracks from "../FoundTracks";
 
 class FeaturedPlaylists extends Component{
   constructor(){
@@ -18,17 +19,12 @@ class FeaturedPlaylists extends Component{
 
   render(){
     return(
-      <div className="content">
-        <h4>Featured</h4>
-        <ul>
-          {this.state.featuredPlaylists.map((playlist, key) =>
-            <li key={key}>
-              <img src={playlist.images[0].url} alt={playlist.name} width={playlist.images[0].width}/>
-              <span key={key}>{playlist.name}</span>
-            </li>
-          )}
-        </ul>
-      </div>
+      <>
+        <FoundTracks
+          results={this.state.featuredPlaylists}
+          closeWindow={this.props.closeWindow}
+        />
+      </>
     )
   }
 }

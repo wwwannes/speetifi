@@ -1,38 +1,47 @@
-import React from 'react';
+import React, {Component} from 'react';
 
-const FoundTracks = (foundTracks) => {
+class FoundTracks extends Component{
+  constructor(){
+    super()
+    this.state = {
+      status: "open"
+    }
+  }
 
-  const tracks = foundTracks.foundTracks.tracks.items;
-  const playlists = foundTracks.foundTracks.playlists.items;
+  closeWindow(){
+    this.setState({status: "close"})
 
-  let selectedTracks = tracks.sort((a, b) => (a.name > b.name) ? 1 : -1).slice(0, 5);
-  let selectedPlaylists = playlists.slice(0,5);
+    setTimeout(
+      function() {
+          this.setState({status: ""})
+          this.props.closeWindow()
+      }
+      .bind(this),
+      1750
+    );
+  }
 
-  const songs = selectedTracks.concat(selectedPlaylists);
-
-  return(
-    <>
-      {songs.sort((a, b) => (a.name > b.name) ? 1 : -1).map((song, key) => (
-        song.type == "track" ?
-          <div key={key}>
-            <h1>{song.name}</h1>
-            <span>
-              {song.artists.map((artist, key) =>
-              song.artists.length > 1 ?
-              key == song.artists.length - 1 ?
-                artist.name :
-                artist.name+", " :
-              artist.name )}
-            </span>
-          </div>
-        :
-          <div key={key}>
-            <h1>{song.name}</h1>
-            <span>playlist by {song.owner.display_name}</span>
-          </div>
-      ))}
-    </>
-  )
+  render(){
+    console.log(this.props.results);
+    return(
+      <div className={`content ${this.state.status}`}>
+        <span className="close-btn" onClick={() => this.closeWindow()}>CLOSE</span>
+        <ol className="song-list">
+          {this.props.results.map((song, key) =>
+            <li className="song-list-item" key={key}>
+              <div>
+                <span className="title" key={key}>{song.name}</span>
+                {/* ONLY SHOW ARTISTS WHEN AVAILABLE */}
+                {song.artists &&
+                  <span className="subtitle">{song.artists[0].name}</span>
+                }
+              </div>
+            </li>
+          )}
+        </ol>
+      </div>
+    )
+  }
 }
 
 export default FoundTracks;
