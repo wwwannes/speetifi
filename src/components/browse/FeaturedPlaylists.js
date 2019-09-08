@@ -23,6 +23,7 @@ class FeaturedPlaylists extends Component{
         <FoundTracks
           results={this.state.featuredPlaylists}
           closeWindow={this.props.closeWindow}
+          page="Featured playlists"
         />
       </>
     )

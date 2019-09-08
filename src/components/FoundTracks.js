@@ -5,11 +5,30 @@ class FoundTracks extends Component{
     super()
     this.state = {
       status: "open",
-      audioObject: null
+      mouseX: 0,
+      mouseY: 0,
+      hoverIndex: null,
+      audioObject: null,
+      audioPlaying: false
     }
   }
 
+  mouseEnter(key){
+    this.setState({hoverIndex: key});
+  }
+  mouseLeave(){
+    this.setState({hoverIndex: null});
+  }
+  mouseMove(e) {
+    this.setState({ mouseX: e.screenX - 300, mouseY: e.screenY - 300 });
+    console.log(this.index)
+  }
+
   closeWindow(){
+    if(this.state.audioPlaying){
+      this.setState({audioObject: null})
+    }
+
     this.setState({status: "close"})
 
     setTimeout(
@@ -23,35 +42,52 @@ class FoundTracks extends Component{
   }
 
   playDemo(url){
-    this.state.audioObject = new Audio(url);
-    this.state.audioObject.play();
+    if(!this.state.audioPlaying){
+      this.setState({audioPlaying: true});
+      this.state.audioObject = new Audio(url);
+      this.state.audioObject.play();
+
+      setTimeout(
+        function() {
+            this.setState({audioPlaying: false});
+        }
+        .bind(this),
+        30000
+      );
+    }
   }
 
   render(){
-    console.log(this.props.results);
     return(
       <div className={`content ${this.state.status}`}>
-        <span className="close-btn" onClick={() => this.closeWindow()}>CLOSE</span>
+        <span className="close-btn" onClick={() => this.closeWindow()}>CLOSE {this.props.page}</span>
         <ol className="song-list">
           {this.props.results.map((song, key) =>
-            <li className="song-list-item" key={key}>
+            <li className="song-list-item" key={key} onMouseEnter={() => this.mouseEnter(key)} onMouseMove={this.mouseMove.bind(this)} onMouseLeave={() => this.mouseLeave()}>
               <div>
-                {song.preview_url &&
-                  <span onClick={() => this.playDemo(song.preview_url)}><i class="fas fa-volume-off"></i></span>
-                }
-
-                <a href={song.external_urls.spotify} target="_blank" className={!song.artists && "playlist"}>
+                <div className={`song-element ${!song.artists ? "playlist" : ""}`}>
                   {/* ONLY SHOW ARTISTS WHEN AVAILABLE */}
                   {song.artists &&
-                    <span className="subtitle">{song.artists[0].name}</span>
+                    <div className="subtitle">
+                      {song.preview_url &&
+                        <div className="play-btn" onClick={() => this.playDemo(song.preview_url)}><span></span></div>
+                      }
+                      <a href={song.external_urls.spotify} target="_blank">{song.artists[0].name}</a>
+                    </div>
                   }
-                  <img src={song.images ? song.images[0].url : song.album.images[0].url} alt={song.name}/>
                   <span className="title" key={key}>{song.name}</span>
-                </a>
+                </div>
               </div>
             </li>
           )}
         </ol>
+
+        <div className="cover-container">
+          {this.props.results.map((song, key) =>
+            <img className={`cover ${this.state.hoverIndex == key && "active"}`} src={song.images ? song.images[0].url : song.album.images[0].url} alt={song.name} style={{'top':this.state.mouseY, 'left':this.state.mouseX}} key={key}/>
+          )}
+        </div>
+
       </div>
     )
   }

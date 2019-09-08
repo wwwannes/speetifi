@@ -16,7 +16,7 @@ body{
 }
 
 h1{
-  font-weight: 700;
+  font-weight: 900;
 }
 
 li{
@@ -53,6 +53,37 @@ a{
   font-size: 0.7em;
 }
 
+.play-btn{
+  border: 1px solid white;
+  border-radius: 100px;
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  margin-right: 10px;
+  position: relative;
+
+  &:before{
+    content: "";
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: 2px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 0 6px 10px;
+    border-color: transparent transparent transparent white;
+    transform: translate(-50%, -50%);
+  }
+
+  &:hover{
+    &:before{
+      border-color: transparent transparent transparent $highlight;
+    }
+  }
+}
+
 /* LOGIN */
 .login{
   position: absolute;
@@ -64,6 +95,7 @@ a{
     text-transform: uppercase;
     transform: skew($skew, $skew);
     font-size: 5em;
+    color: $highlight;
   }
 
   a{
@@ -140,15 +172,17 @@ a{
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
+  z-index: 3;
 
   .song-list-item{
     text-align: center;
     position: relative;
     transform: skew($skew, $skew);
 
-    a{
+    .song-element{
       display: block;
       position: relative;
+      cursor: pointer;
 
       .subtitle{
         display: block;
@@ -159,6 +193,7 @@ a{
         transform: translateX(-50%);
         font-style: italic;
         opacity: 0;
+        z-index: 15;
       }
       img{
         display: block;
@@ -264,6 +299,8 @@ a{
       left: 0;
       color: $highlight;
       z-index: 99999;
+      cursor: pointer;
+      text-transform: capitalize;
     }
 
     .content{
@@ -289,6 +326,21 @@ a{
       > * {
         opacity: 0;
         transition: opacity 1s ease;
+      }
+
+      .cover-container{
+        position: relative;
+        z-index: 2;
+
+        .cover{
+          position: absolute;
+          top: 0;
+          left: 0;
+          opacity: 0;
+          &.active{
+            opacity: .5;
+          }
+        }
       }
     }
 

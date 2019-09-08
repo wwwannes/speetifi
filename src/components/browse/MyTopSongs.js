@@ -25,6 +25,7 @@ class MyTopSongs extends Component{
         <FoundTracks
           results={this.state.songs}
           closeWindow={this.props.closeWindow}
+          page="My top songs"
         />
       </>
     )

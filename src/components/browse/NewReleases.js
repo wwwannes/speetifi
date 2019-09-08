@@ -29,6 +29,7 @@ class NewReleases extends Component{
         <FoundTracks
           results={this.state.newReleases}
           closeWindow={this.props.closeWindow}
+          page="New releases"
         />
       </>
     )

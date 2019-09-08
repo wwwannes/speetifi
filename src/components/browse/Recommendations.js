@@ -35,6 +35,7 @@ class Recommendations extends Component{
         <FoundTracks
           results={this.state.recommendations}
           closeWindow={this.props.closeWindow}
+          page="Recommendations"
         />
       </>
     )
