@@ -1,3 +1,8 @@
+/* VARIABLES */
+$highlight: #1DB954;
+$black: #191414;
+$skew: -3deg;
+
 /* GENERAL */
 *, html, body{
   margin: 0;
@@ -5,9 +10,9 @@
 }
 
 body{
-  font-family: 'Playfair Display', serif;
+  font-family: 'Helvetica', sans-serif;
   color: white;
-  background: #1f1f1f;
+  background: $black;
 }
 
 h1{
@@ -16,6 +21,11 @@ h1{
 
 li{
   list-style: none;
+}
+
+a{
+  color: white;
+  text-decoration: none;
 }
 
 .container{
@@ -43,9 +53,32 @@ li{
   font-size: 0.7em;
 }
 
+/* LOGIN */
+.login{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  h1{
+    text-transform: uppercase;
+    transform: skew($skew, $skew);
+    font-size: 5em;
+  }
+
+  a{
+    margin-top: 40px;
+    transform: skew($skew, $skew);
+
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+}
+
 /* USERDATA */
 .userdata{
-  width: 100%;
+  width: 250px;
   text-align: right;
   position: absolute;
   top: 10px;
@@ -100,9 +133,79 @@ li{
   }
 }
 
+/* SONGS OVERVIEW */
+.song-list{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+
+  .song-list-item{
+    text-align: center;
+    position: relative;
+    transform: skew($skew, $skew);
+
+    a{
+      display: block;
+      position: relative;
+
+      .subtitle{
+        display: block;
+        font-size: 2.5em;
+        font-weight: 900;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-style: italic;
+        opacity: 0;
+      }
+      img{
+        display: block;
+        z-index: -1;
+        position: absolute;
+        opacity: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .title{
+        display: block;
+        text-transform: uppercase;
+        font-weight: 900;
+        -webkit-text-stroke: 1px white;
+        color: rgba(0, 0, 0, 0);
+      }
+
+      &:hover{
+        &:not(.playlist){
+          .title{
+            opacity: 0;
+          }
+          .subtitle{
+            opacity: 1;
+            width: 100%;
+          }
+          img{
+            opacity: .6;
+          }
+        }
+
+        &.playlist{
+          .title{
+            color: white;
+          }
+          img{
+            opacity: .6;
+          }
+        }
+      }
+    }
+  }
+}
+
 /* TABS */
-.tab-list,
-.song-list {
+.tab-list
+/*,.song-list*/ {
   padding-left: 0;
   width:100%;
   position: absolute;
@@ -119,9 +222,17 @@ li{
     margin-bottom: -1px;
     padding: 0.5rem 0.75rem;
     cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 900;
+    -webkit-text-stroke: 1px white;
+    color: rgba(0, 0, 0, 0);
+    font-style: italic;
+    transform: skew($skew, $skew);
 
     &.tab-list-active,
     &:hover {
+      color: rgba(255, 255, 255, 1);
+
       span{
         position: relative;
 
@@ -148,8 +259,15 @@ li{
     position: absolute;
     z-index: 4;
 
-    > div{
-      background: pink;
+    .close-btn{
+      position: absolute;
+      left: 0;
+      color: $highlight;
+      z-index: 99999;
+    }
+
+    .content{
+      background: $highlight;
       width: 100vw;
       height: 100vh;
       position: absolute;
@@ -160,7 +278,7 @@ li{
         content: "";
         width: 100vw;
         height: 100vh;
-        background: #1f1f1f;
+        background: $black;
         margin-left: auto;
         margin-right: auto;
         position: absolute;
@@ -174,8 +292,8 @@ li{
       }
     }
 
-    &.active{
-      > div{
+    .content{
+      &.open{
         animation: slideIn .5s ease-out;
         animation-fill-mode: forwards;
 
@@ -189,6 +307,25 @@ li{
           animation: opacityIn .75s ease-in;
           animation-fill-mode: forwards;
           animation-delay: .5s;
+        }
+      }
+
+      &.close{
+        top: 0;
+        animation: slideOut .5s ease-in;
+        animation-fill-mode: forwards;
+        animation-delay: .5s;
+
+        &:before{
+          top: 0;
+          animation: slideOut .5s ease-in;
+          animation-fill-mode: forwards;
+          animation-delay: .2s;
+        }
+
+        > *{
+          animation: opacityOut .5s ease-out;
+          animation-fill-mode: forwards;
         }
       }
     }
@@ -216,6 +353,16 @@ li{
   }
 }
 
+@keyframes slideOut {
+  0% {
+    top: 0;
+  }
+
+  100%{
+    top: 100vh;
+  }
+}
+
 @keyframes opacityIn {
   0% {
     opacity: 0;
@@ -223,5 +370,15 @@ li{
 
   100%{
     opacity: 1;
+  }
+}
+
+@keyframes opacityOut {
+  0% {
+    opacity: 1;
+  }
+
+  100%{
+    opacity: 0;
   }
 }

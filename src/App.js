@@ -1,4 +1,3 @@
-/* https://github.com/thelinmichael/spotify-web-api-node/blob/master/src/spotify-web-api.js */
 import React, { Component } from 'react';
 import './App.scss';
 
@@ -33,47 +32,17 @@ class App extends Component {
     return hashParams;
   }
 
-  getNowPlaying(){
-      /* get a track by id */
-      /*spotifyApi.getTrack("6oJ6le65B3SEqPwMRNXWjY")
-        .then(function(data) {
-          console.log('Some information about the authenticated user', data);
-        }, function(err) {
-          console.log('Something went wrong!', err);
-        });*/
-
-      /* get related artist */
-      spotifyApi.getArtistRelatedArtists("0oSGxfWSnnOXhD2fKuz2Gy")
-        .then(function(data) {
-          console.log('Some information about the authenticated user', data);
-        }, function(err) {
-          console.log('Something went wrong!', err);
-        });
-
-      /* get playlists of logged in user */
-      spotifyApi.getUserPlaylists()
-        .then(function(data) {
-          console.log('Some information about the authenticated user', data);
-        }, function(err) {
-          console.log('Something went wrong!', err);
-        });
-
-    /*spotifyApi.getMyCurrentPlaybackState()
-      .then((response) => {
-        this.setState({
-          nowPlaying: {
-              name: response.item.name,
-              albumArt: response.item.album.images[0].url
-            }
-        });
-      })*/
-  }
   render() {
     return (
       <div className="App">
-        {!this.state.loggedIn &&
-          <a href='http://localhost:8888' > Login to Spotify </a>
-        }
+        <div className="container">
+          {!this.state.loggedIn &&
+            <div className='login'>
+              <h1>Speetifi</h1>
+              <a href='http://localhost:8888/login'> Login to Spotify </a>
+            </div>
+          }
+        </div>
         {this.state.loggedIn &&
           <Loggedin api={spotifyApi}/>
         }

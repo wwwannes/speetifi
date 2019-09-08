@@ -4,7 +4,8 @@ class FoundTracks extends Component{
   constructor(){
     super()
     this.state = {
-      status: "open"
+      status: "open",
+      audioObject: null
     }
   }
 
@@ -21,6 +22,11 @@ class FoundTracks extends Component{
     );
   }
 
+  playDemo(url){
+    this.state.audioObject = new Audio(url);
+    this.state.audioObject.play();
+  }
+
   render(){
     console.log(this.props.results);
     return(
@@ -30,11 +36,18 @@ class FoundTracks extends Component{
           {this.props.results.map((song, key) =>
             <li className="song-list-item" key={key}>
               <div>
-                <span className="title" key={key}>{song.name}</span>
-                {/* ONLY SHOW ARTISTS WHEN AVAILABLE */}
-                {song.artists &&
-                  <span className="subtitle">{song.artists[0].name}</span>
+                {song.preview_url &&
+                  <span onClick={() => this.playDemo(song.preview_url)}><i class="fas fa-volume-off"></i></span>
                 }
+
+                <a href={song.external_urls.spotify} target="_blank" className={!song.artists && "playlist"}>
+                  {/* ONLY SHOW ARTISTS WHEN AVAILABLE */}
+                  {song.artists &&
+                    <span className="subtitle">{song.artists[0].name}</span>
+                  }
+                  <img src={song.images ? song.images[0].url : song.album.images[0].url} alt={song.name}/>
+                  <span className="title" key={key}>{song.name}</span>
+                </a>
               </div>
             </li>
           )}
