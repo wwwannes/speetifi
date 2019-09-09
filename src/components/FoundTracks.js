@@ -84,7 +84,10 @@ class FoundTracks extends Component{
   render(){
     return(
       <div className={`content ${this.state.status}`}>
-        <span className="close-btn" onClick={() => this.closeWindow()}>CLOSE {this.props.page}</span>
+        <div className="close-btn" onClick={() => this.closeWindow()}>
+          <span className="close-icon"></span>
+          <span className="close-text">{this.props.page}</span>
+        </div>
         <ol className="song-list">
 
           <audio src={this.state.audioLink} ref={this.myRef} autoPlay/>
@@ -103,11 +106,11 @@ class FoundTracks extends Component{
                     <div className="subtitle">
                       {song.preview_url &&
                         <div
-                          className={`play-btn ${this.state.updatePreview != null & this.state.audioLink != "" ? "playing" : ""}`}
+                          className={`play-btn ${this.state.updatePreview !== null & this.state.audioLink !== "" ? "playing" : ""}`}
                           onClick={() => this.playDemo(song.preview_url, key)}
                         >
                           <CircularProgressbar
-                            value={this.state.songIndex == key ? this.state.previewProgress : 0}
+                            value={this.state.songIndex === key ? this.state.previewProgress : 0}
                             styles={buildStyles({
                               pathColor: '#1DB954',
                               trailColor: 'white',
@@ -118,10 +121,10 @@ class FoundTracks extends Component{
                           />
                         </div>
                       }
-                      <a href={song.external_urls.spotify} target="_blank">{song.artists[0].name}</a>
+                      <a href={song.external_urls.spotify} target="_blank" rel="noopener noreferrer">{song.artists[0].name}</a>
                     </div>
                   }
-                  <span className="title" key={key}>{song.name}</span>
+                  <a href={song.external_urls.spotify} target="_blank" rel="noopener noreferrer" className="title" key={key}>{song.name}</a>
                 </div>
               </div>
             </li>
@@ -131,7 +134,7 @@ class FoundTracks extends Component{
         <div className="cover-container">
           {this.props.results.map((song, key) =>
             <img
-              className={`cover ${this.state.hoverIndex == key && "active"}`}
+              className={`cover ${this.state.hoverIndex === key && "active"}`}
               src={song.images ? song.images[0].url : song.album.images[0].url}
               alt={song.name}
               style={{'top':this.state.mouseY, 'left':this.state.mouseX}}

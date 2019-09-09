@@ -25,11 +25,10 @@ A project (Work In Progress) made with Spotify integration, just to play around 
 ## Todo
 * Add functionality to search for songs on Spotify
 * Add functionality to display songs based on genre
-* Expand audio preview functionality
 * General bug fixing
 * ...
 
 ## Built width
 - [ReactJS](https://reactjs.org/)
-- [spotify-web-api-js] (https://github.com/JMPerez/spotify-web-api-js)
-- [Create React App] (https://github.com/facebook/create-react-app)
+- [spotify-web-api-js](https://github.com/JMPerez/spotify-web-api-js)
+- [Create React App](https://github.com/facebook/create-react-app)

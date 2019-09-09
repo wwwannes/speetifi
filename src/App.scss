@@ -137,7 +137,7 @@ a{
     transform: skew($skew, $skew);
 
     &:hover{
-      text-decoration: underline;
+      opacity: .6;
     }
   }
 }
@@ -273,8 +273,7 @@ a{
 }
 
 /* TABS */
-.tab-list
-/*,.song-list*/ {
+.tab-list{
   padding-left: 0;
   width:100%;
   position: absolute;
@@ -284,8 +283,7 @@ a{
   -webkit-transform: translateY(-50%);
   z-index: 2;
 
-  .tab-list-item,
-  .song-list-item {
+  .tab-list-item{
     display: block;
     list-style: none;
     margin-bottom: -1px;
@@ -316,6 +314,7 @@ a{
           left: 50%;
           transform: translate(-50%,-50%);
           -ms-transform: translate(-50%,-50%);
+          -moz-transform: translate(-50%,-50%);
           -webkit-transform: translate(-50%,-50%);
         }
       }
@@ -334,7 +333,50 @@ a{
       color: $highlight;
       z-index: 99999;
       cursor: pointer;
-      text-transform: capitalize;
+
+      .close-icon{
+        width: 20px;
+        height: 20px;
+        border: 2px solid $highlight;
+        border-radius: 50%;
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+
+        &:before,
+        &:after{
+          content: "";
+          display: block;
+          width: 2px;
+          height: 12px;
+          background: $highlight;
+          position: absolute;
+          top: calc(50% - 6px);
+          left: calc(50% - 1px);
+          transform: translate(-50%,-50%);
+          -ms-transform: translate(-50%,-50%);
+          -moz-transform: translate(-50%,-50%);
+          -webkit-transform: translate(-50%,-50%);
+          transform: rotate(45deg);
+        }
+        &:after{
+          transform: rotate(-45deg);
+        }
+      }
+      .close-text{
+        text-transform: uppercase;
+        font-weight: bold;
+        line-height: 20px;
+        margin-left: 5px;
+      }
+
+      &:hover{
+        .close-icon{
+          -webkit-animation: spin .5s linear 1;
+          -moz-animation: spin .5s linear 1;
+          animation: spin .5s linear 1;
+        }
+      }
     }
 
     .content{
@@ -469,3 +511,7 @@ a{
     opacity: 0;
   }
 }
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
