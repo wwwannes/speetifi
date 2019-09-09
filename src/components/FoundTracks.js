@@ -1,59 +1,83 @@
 import React, {Component} from 'react';
 
+import {
+  CircularProgressbar,
+  buildStyles,
+} from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+
 class FoundTracks extends Component{
   constructor(){
     super()
     this.state = {
       status: "open",
-      mouseX: 0,
-      mouseY: 0,
+      mouseX: null,
+      mouseY: null,
       hoverIndex: null,
-      audioObject: null,
-      audioPlaying: false
+      previewProgress: 0,
+      audioLink: "",
+      songIndex: null,
+      updatePreview: null,
+      reset: null
     }
   }
 
   mouseEnter(key){
-    this.setState({hoverIndex: key});
+    this.state.mouseX != null &&
+      this.setState({hoverIndex: key});
   }
   mouseLeave(){
-    this.setState({hoverIndex: null});
+    // RESET ALL AUDIO LOGIC
+    clearInterval(this.state.updatePreview);
+    clearTimeout(this.state.reset);
+
+    this.setState({hoverIndex: null, previewProgress: 0, audioLink: ""});
   }
   mouseMove(e) {
     this.setState({ mouseX: e.screenX - 300, mouseY: e.screenY - 300 });
-    console.log(this.index)
   }
 
   closeWindow(){
-    if(this.state.audioPlaying){
-      this.setState({audioObject: null})
-    }
-
-    this.setState({status: "close"})
+    this.setState({audioLink: "", status: "close"});
 
     setTimeout(
       function() {
-          this.setState({status: ""})
-          this.props.closeWindow()
+          this.setState({status: ""});
+          this.props.closeWindow();
       }
       .bind(this),
       1750
     );
   }
 
-  playDemo(url){
-    if(!this.state.audioPlaying){
-      this.setState({audioPlaying: true});
-      this.state.audioObject = new Audio(url);
-      this.state.audioObject.play();
+  updatePreview(){
+    const perSecond = 100 / 30; //100% - PREVIEWS ARE ALWAYS 30 SECONDS LONG
+    this.setState({previewProgress: this.state.previewProgress + perSecond});
+  }
 
-      setTimeout(
+  playDemo(url, index){
+
+    clearInterval(this.state.updatePreview);
+    clearTimeout(this.state.reset);
+
+    if(this.state.updatePreview == null){
+      this.myRef = React.createRef();
+      this.setState({audioLink: url, songIndex: index, previewProgress: 0});
+
+      const updatePreview = setInterval(this.updatePreview.bind(this), 1000);
+      this.setState({updatePreview: updatePreview}) // MAKE INTERVAL AVAILABLE FOR RESET
+
+      const reset = setTimeout(
         function() {
-            this.setState({audioPlaying: false});
+          this.setState({previewProgress: 0, updatePreview: null});
+          clearInterval(updatePreview);
         }
         .bind(this),
         30000
       );
+      this.setState({reset: reset}); // MAKE TIMEOUT AVAILABLE FOR RESET
+    } else {
+      this.setState({audioLink: "", songIndex: null, previewProgress: 0, updatePreview: null});
     }
   }
 
@@ -62,15 +86,37 @@ class FoundTracks extends Component{
       <div className={`content ${this.state.status}`}>
         <span className="close-btn" onClick={() => this.closeWindow()}>CLOSE {this.props.page}</span>
         <ol className="song-list">
+
+          <audio src={this.state.audioLink} ref={this.myRef} autoPlay/>
+
           {this.props.results.map((song, key) =>
-            <li className="song-list-item" key={key} onMouseEnter={() => this.mouseEnter(key)} onMouseMove={this.mouseMove.bind(this)} onMouseLeave={() => this.mouseLeave()}>
+            <li
+              className="song-list-item"
+              key={key} onMouseEnter={() => this.mouseEnter(key)}
+              onMouseMove={this.mouseMove.bind(this)}
+              onMouseLeave={() => this.mouseLeave()}
+            >
               <div>
                 <div className={`song-element ${!song.artists ? "playlist" : ""}`}>
                   {/* ONLY SHOW ARTISTS WHEN AVAILABLE */}
                   {song.artists &&
                     <div className="subtitle">
                       {song.preview_url &&
-                        <div className="play-btn" onClick={() => this.playDemo(song.preview_url)}><span></span></div>
+                        <div
+                          className={`play-btn ${this.state.updatePreview != null & this.state.audioLink != "" ? "playing" : ""}`}
+                          onClick={() => this.playDemo(song.preview_url, key)}
+                        >
+                          <CircularProgressbar
+                            value={this.state.songIndex == key ? this.state.previewProgress : 0}
+                            styles={buildStyles({
+                              pathColor: '#1DB954',
+                              trailColor: 'white',
+                              strokeLinecap: 'butt',
+                              pathTransition:
+                                this.state.previewProgress === 0 ? 'none' : 'stroke-dashoffset 0.5s ease 0s',
+                            })}
+                          />
+                        </div>
                       }
                       <a href={song.external_urls.spotify} target="_blank">{song.artists[0].name}</a>
                     </div>
@@ -84,10 +130,15 @@ class FoundTracks extends Component{
 
         <div className="cover-container">
           {this.props.results.map((song, key) =>
-            <img className={`cover ${this.state.hoverIndex == key && "active"}`} src={song.images ? song.images[0].url : song.album.images[0].url} alt={song.name} style={{'top':this.state.mouseY, 'left':this.state.mouseX}} key={key}/>
+            <img
+              className={`cover ${this.state.hoverIndex == key && "active"}`}
+              src={song.images ? song.images[0].url : song.album.images[0].url}
+              alt={song.name}
+              style={{'top':this.state.mouseY, 'left':this.state.mouseX}}
+              key={key}
+            />
           )}
         </div>
-
       </div>
     )
   }

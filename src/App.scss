@@ -54,13 +54,18 @@ a{
 }
 
 .play-btn{
-  border: 1px solid white;
+  display: inline-block;
+  margin-right: 10px;
+  position: relative;
+  width: 25px;
+
+  /*border: 1px solid white;
   border-radius: 100px;
   width: 25px;
   height: 25px;
   display: inline-block;
   margin-right: 10px;
-  position: relative;
+  position: relative;*/
 
   &:before{
     content: "";
@@ -75,12 +80,41 @@ a{
     border-width: 6px 0 6px 10px;
     border-color: transparent transparent transparent white;
     transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+  }
+
+  &.playing{
+    &:before,
+    &:after{
+      content: "";
+      width: 3px;
+      height: 9px;
+      background: $highlight;
+      border: none;
+      display: inline-block;
+      position: absolute;
+      top: 50%;
+      left: 6px;
+      transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      -moz-transform: translateY(-50%);
+      -webkit-transform: translateY(-50%);
+    }
+    &:after{
+      left: 15px;
+    }
   }
 
   &:hover{
     &:before{
       border-color: transparent transparent transparent $highlight;
     }
+  }
+
+  .CircularProgressbar {
+    margin-top: -7.5px;
   }
 }
 
@@ -337,6 +371,7 @@ a{
           top: 0;
           left: 0;
           opacity: 0;
+
           &.active{
             opacity: .5;
           }
