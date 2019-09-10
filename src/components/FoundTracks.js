@@ -34,7 +34,7 @@ class FoundTracks extends Component{
     this.setState({hoverIndex: null, previewProgress: 0, audioLink: ""});
   }
   mouseMove(e) {
-    this.setState({ mouseX: e.screenX - 300, mouseY: e.screenY - 300 });
+    this.setState({ mouseX: e.pageX - 300, mouseY: e.pageY - 300 });
   }
 
   closeWindow(){
