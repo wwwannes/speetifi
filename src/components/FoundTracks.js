@@ -91,10 +91,8 @@ class FoundTracks extends Component{
           <span className="close-icon"></span>
           <span className="close-text">{this.props.page}</span>
         </div>
+        <audio src={this.state.audioLink} ref={this.myRef} autoPlay/>
         <ol className="song-list">
-
-          <audio src={this.state.audioLink} ref={this.myRef} autoPlay/>
-
           {this.props.results.map((song, key) =>
             <li
               className="song-list-item"

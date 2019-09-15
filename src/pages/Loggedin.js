@@ -15,11 +15,11 @@ class Loggedin extends Component{
     super(props);
     this.state = {
       navigation: [
-        {title: "Search tracks & playlists", component: "SearchTracks"},
+        {title: "Tracks & playlists", component: "SearchTracks"},
         {title: "New releases", component: "NewReleases"},
         {title: "My top songs", component: "MyTopSongs"},
         {title: "Recommendations",component: "Recommendations"},
-        /*{title: "Browse by category", component: "BrowseByCategory"},*/
+        {title: "Browse by category", component: "BrowseByCategory"},
         {title: "Featured playlists", component: "FeaturedPlaylists"}
       ],
       activeContent: null
