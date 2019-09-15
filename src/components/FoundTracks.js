@@ -43,7 +43,10 @@ class FoundTracks extends Component{
     setTimeout(
       function() {
           this.setState({status: ""});
-          this.props.closeWindow();
+
+          // ONLY RESET THE WINDOW WHEN THERE IS NO SECOND LEVE OF RESULTS PRESENT
+          !this.props.secondLevel &&
+            this.props.closeWindow();
       }
       .bind(this),
       1750
@@ -95,7 +98,8 @@ class FoundTracks extends Component{
           {this.props.results.map((song, key) =>
             <li
               className="song-list-item"
-              key={key} onMouseEnter={() => this.mouseEnter(key)}
+              key={key}
+              onMouseEnter={() => this.mouseEnter(key)}
               onMouseMove={this.mouseMove.bind(this)}
               onMouseLeave={() => this.mouseLeave()}
             >
@@ -121,27 +125,39 @@ class FoundTracks extends Component{
                           />
                         </div>
                       }
-                      <a href={song.external_urls.spotify} target="_blank" rel="noopener noreferrer">{song.artists[0].name}</a>
+                      {song.external_urls &&
+                        <a href={song.external_urls.spotify} target="_blank" rel="noopener noreferrer" key={key}>{song.artists[0].name}</a>
+                      }
                     </div>
                   }
-                  <a href={song.external_urls.spotify} target="_blank" rel="noopener noreferrer" className="title" key={key}>{song.name}</a>
+                  {song.external_urls ?
+                    <a href={song.external_urls.spotify} target="_blank" rel="noopener noreferrer" className="title" key={key}>{song.name}</a>
+                  :
+                    <span className="title" key={key}>{song.name}</span>
+                  }
                 </div>
               </div>
             </li>
           )}
         </ol>
 
-        <div className="cover-container">
-          {this.props.results.map((song, key) =>
-            <img
-              className={`cover ${this.state.hoverIndex === key && "active"}`}
-              src={song.images ? song.images[0].url : song.album.images[0].url}
-              alt={song.name}
-              style={{'top':this.state.mouseY, 'left':this.state.mouseX}}
-              key={key}
-            />
-          )}
-        </div>
+        {this.props.results.length > 0 &&
+          <div className="cover-container">
+            {this.props.results.map((song, key) =>
+              <>
+                {(song.album || song.images) &&
+                  <img
+                    className={`cover ${this.state.hoverIndex === key ? "active" : ""}`}
+                    src={song.images ? song.images[0].url : song.album.images[0].url}
+                    alt={song.name}
+                    style={{'top':this.state.mouseY, 'left':this.state.mouseX}}
+                    key={key}
+                  />
+                }
+              </>
+            )}
+          </div>
+        }
       </div>
     )
   }
