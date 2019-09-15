@@ -21,12 +21,11 @@ A project (Work In Progress) made with Spotify integration, just to play around 
 * Display 10 random songs recommended for the logged in user
 * Display 10 random playlists
 * Play an audio preview when available
+* Search for songs on Spotify
+* Display songs based on genre
 
 ## Todo
-* Add functionality to search for songs on Spotify
-* Add functionality to display songs based on genre
 * General bug fixing
-* ...
 
 ## Built width
 - [ReactJS](https://reactjs.org/)
