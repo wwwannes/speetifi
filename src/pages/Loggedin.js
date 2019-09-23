@@ -9,6 +9,7 @@ import BrowseByCategory from '../components/browse/BrowseByCategory';
 import FeaturedPlaylists from '../components/browse/FeaturedPlaylists';
 import Recommendations from '../components/browse/Recommendations';
 import MyTopSongs from '../components/browse/MyTopSongs';
+import RecentlyPlayed from '../components/browse/RecentlyPlayed';
 
 class Loggedin extends Component{
   constructor(props){
@@ -17,7 +18,8 @@ class Loggedin extends Component{
       navigation: [
         {title: "Tracks & playlists", component: "SearchTracks"},
         {title: "New releases", component: "NewReleases"},
-        {title: "My top songs", component: "MyTopSongs"},
+        {title: "Recently Played", component: "RecentlyPlayed"},
+        {title: "Featured playlists", component: "FeaturedPlaylists"},
         {title: "Recommendations",component: "Recommendations"},
         {title: "Browse by category", component: "BrowseByCategory"},
         {title: "Featured playlists", component: "FeaturedPlaylists"}
@@ -28,6 +30,17 @@ class Loggedin extends Component{
 
   toggleWindow(showComponent) {
     this.setState({activeContent: showComponent});
+  }
+
+  componentDidMount(){
+    // LOG OUT AFTER 1 HOUR
+    setTimeout(
+      function() {
+        window.history.pushState({},'',"./")
+        window.location.reload();
+      },
+      600000
+    );
   }
 
   render(){
@@ -56,6 +69,8 @@ class Loggedin extends Component{
                       return <BrowseByCategory api={this.props.api} closeWindow={this.toggleWindow.bind(this)}/>;
                     case 'NewReleases':
                       return <NewReleases api={this.props.api} closeWindow={this.toggleWindow.bind(this)}/>;
+                      case 'RecentlyPlayed':
+                        return <RecentlyPlayed api={this.props.api} closeWindow={this.toggleWindow.bind(this)}/>;
                   default:
                     return null;
                 }
