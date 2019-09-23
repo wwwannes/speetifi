@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import FoundTracks from "./FoundTracks";
 
 class SearchTracks extends Component {
@@ -34,9 +34,6 @@ class SearchTracks extends Component {
   }
 
   searchByTerm(e){
-
-    console.log('GETYPED')
-
     const query = e.target.textContent;
     //this.setState({searchText: query});
     clearTimeout(this.state.timeout);
@@ -51,7 +48,7 @@ class SearchTracks extends Component {
     const timeout = setTimeout(function () {
 
       // SEARCHES TRACKS AND PLAYLISTS
-      if(query != "" && query != "Search"){
+      if(query !== "" && query !== "Search"){
         this.props.api.search(query, ['track', 'playlist'], { limit: 50, offset: 1 })
           .then(
             response => {
@@ -97,6 +94,7 @@ class SearchTracks extends Component {
             <FoundTracks
               results={this.state.tracksFound}
               closeWindow={this.props.closeWindow}
+              api={this.props.api}
               page="Tracks & playlist"
               secondLevel="true"
             />

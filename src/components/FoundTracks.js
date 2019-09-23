@@ -18,7 +18,8 @@ class FoundTracks extends Component{
       audioLink: "",
       songIndex: null,
       updatePreview: null,
-      reset: null
+      reset: null,
+      playing: false
     }
   }
 
@@ -27,20 +28,22 @@ class FoundTracks extends Component{
       this.setState({hoverIndex: key});
   }
   mouseLeave(){
+    if(this.state.playing){
+      // PLAY SPOTIFY MUSIC AGAIN AFTER DEMO HAS STOPPED
+      setTimeout(
+        function() {
+          this.props.api.play();
+        }
+        .bind(this),
+        500
+      );
+    }
+
     // RESET ALL AUDIO LOGIC
     clearInterval(this.state.updatePreview);
     clearTimeout(this.state.reset);
 
     this.setState({hoverIndex: null, previewProgress: 0, audioLink: ""});
-
-    // PLAY SPOTIFY MUSIC AGAIN AFTER DEMO HAS STOPPED
-    setTimeout(
-      function() {
-        this.props.api.play();
-      }
-      .bind(this),
-      500
-    );
   }
   mouseMove(e) {
     this.setState({ mouseX: e.pageX - 300, mouseY: e.pageY - 300 });
@@ -73,7 +76,9 @@ class FoundTracks extends Component{
 
     if(this.state.updatePreview == null){
       //PAUSE SPOTIFY MUSIC CURRENTLY PLAYING
-      this.props.api.pause();
+      if(this.state.playing){
+        this.props.api.pause();
+      }
 
       this.myRef = React.createRef();
       this.setState({audioLink: url, songIndex: index, previewProgress: 0});
@@ -92,17 +97,38 @@ class FoundTracks extends Component{
       this.setState({reset: reset}); // MAKE TIMEOUT AVAILABLE FOR RESET
 
       // PLAY SPOTIFY MUSIC AGAIN AFTER DEMO HAS PLAYED
-      setTimeout(
-        function() {
-          this.props.api.play();
-        }
-        .bind(this),
-        30500
-      );
-
+      if(this.state.playing){
+        setTimeout(
+          function() {
+            this.props.api.play();
+          }
+          .bind(this),
+          30500
+        );
+      }
     } else {
       this.setState({audioLink: "", songIndex: null, previewProgress: 0, updatePreview: null});
     }
+  }
+
+  currentSong(component, api){
+    api.getMyCurrentPlaybackState()
+      .then((response) => {
+        if(response){
+          component.setState({playing: true})
+        } else {
+          component.setState({playing: false})
+        }
+    })
+  }
+
+  componentDidMount(){
+    setInterval(
+      this.currentSong,
+      1000,
+      this,
+      this.props.api
+    );
   }
 
   render(){

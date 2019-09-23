@@ -92,6 +92,7 @@ class BrowseByCategory extends Component{
               results={this.state.categoryTracks}
               closeWindow={this.props.closeWindow}
               page={this.state.selectedCategory}
+              api={this.props.api}
               secondLevel="true"
             />
           }

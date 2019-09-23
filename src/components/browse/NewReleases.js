@@ -18,7 +18,7 @@ class NewReleases extends Component{
   componentDidMount(){
     this.props.api.getNewReleases({limit:50})
       .then(
-        response => {this.setState({newReleases: this.shuffleArray(response.albums.items).slice(0,10)}); console.log(response)},
+        response => {this.setState({newReleases: this.shuffleArray(response.albums.items).slice(0,10)})},
         error => console.log(error)
       )
   }
@@ -29,6 +29,7 @@ class NewReleases extends Component{
         <FoundTracks
           results={this.state.newReleases}
           closeWindow={this.props.closeWindow}
+          api={this.props.api}
           page="New releases"
         />
       </>
