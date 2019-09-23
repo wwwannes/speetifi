@@ -32,6 +32,15 @@ class FoundTracks extends Component{
     clearTimeout(this.state.reset);
 
     this.setState({hoverIndex: null, previewProgress: 0, audioLink: ""});
+
+    // PLAY SPOTIFY MUSIC AGAIN AFTER DEMO HAS STOPPED
+    setTimeout(
+      function() {
+        this.props.api.play();
+      }
+      .bind(this),
+      500
+    );
   }
   mouseMove(e) {
     this.setState({ mouseX: e.pageX - 300, mouseY: e.pageY - 300 });
@@ -59,11 +68,13 @@ class FoundTracks extends Component{
   }
 
   playDemo(url, index){
-
     clearInterval(this.state.updatePreview);
     clearTimeout(this.state.reset);
 
     if(this.state.updatePreview == null){
+      //PAUSE SPOTIFY MUSIC CURRENTLY PLAYING
+      this.props.api.pause();
+
       this.myRef = React.createRef();
       this.setState({audioLink: url, songIndex: index, previewProgress: 0});
 
@@ -79,6 +90,16 @@ class FoundTracks extends Component{
         30000
       );
       this.setState({reset: reset}); // MAKE TIMEOUT AVAILABLE FOR RESET
+
+      // PLAY SPOTIFY MUSIC AGAIN AFTER DEMO HAS PLAYED
+      setTimeout(
+        function() {
+          this.props.api.play();
+        }
+        .bind(this),
+        30500
+      );
+
     } else {
       this.setState({audioLink: "", songIndex: null, previewProgress: 0, updatePreview: null});
     }
